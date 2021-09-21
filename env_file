@@ -1,0 +1,6 @@
+// Copiar e colar em um arquivo chamado ".env" e colocar uma authSecret de sua escolha (longo e com caracteres especiais)
+// Também coloque esse arquivo novo (".env") no .gitignore
+
+module.exports = {
+    authSecret: ''
+}
