@@ -11,28 +11,38 @@ module.exports = app => {
     const getUsuarios = (req, res) => {
         app.db('usuario')
             .orderBy('id_usu')
-            .then(usuarios => res.json(usuarios))
+            .then(usuarios => res.status(200).json(usuarios))
             .catch(erro => res.status(400).json(erro))
     }
 
     const cadastrarUsuario = (req, res) => {
-        console.log(req.body)
         obterHash(req.body.senha_usu, hash => {
-            const password = hash
+            const senhaCriptografada = hash
 
             app.db('usuario')
                 .insert({ 
                     nome_usu: req.body.nome_usu,
                     email_usu: req.body.email_usu.toLowerCase(),
-                    senha_usu: password,
+                    senha_usu: senhaCriptografada,
+                    tipo_usu: req.body.tipo_usu,
+                    telefone_usu: req.body.telefone_usu,
+                    descricao_usu: req.body.descricao_usu,
+                    nasc_usu: req.body.nasc_usu,
+                    loc_usu: req.body.loc_usu
                 })
                 .then(_ => res.status(204).send())
-                .catch(err => res.status(400).json(err))
+                .catch(err => {
+                    // Manda mensagem personalizada conforme o código do erro
+                    switch(err.code){
+                        case "23505":
+                            return res.status(400).json("Email já cadastrado!")
+                        default:
+                            return res.status(400).json(err)
+                    }})
         })
     }
 
     const alterarUsuario = (req, res) => {
-        const alteracao = req.params.alteracao
         app.db('usuario')
             .where({ id_usu: req.params.id_usu})
             .update(req.body)
@@ -48,7 +58,7 @@ module.exports = app => {
                 if (rowsDeleted > 0) {
                     res.status(204).send()
                 } else {
-                    const msg = `Não foi encontrada task com id ${req.params.id}.`
+                    const msg = `Não foi encontrado usuario com id ${req.params.id_usu}.`
                     res.status(400).send(msg)
                 }
             })

@@ -13,4 +13,5 @@ module.exports = app => {
     app.route('/usuarios/:id_usu/deletar')
         .all(app.config.passport.authenticate())
         .delete(app.api.usuario.deletarUsuario)
+
 }

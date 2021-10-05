@@ -11,7 +11,7 @@ module.exports = app => {
         const user = await app.db('usuario')
             .whereRaw("LOWER(email_usu) = LOWER(?)", req.body.email_usu)
             .first()
-
+    
         if (user) {
             bcrypt.compare(req.body.senha_usu, user.senha_usu, (erro, isMatch) => {
                 if (erro || !isMatch) {
@@ -24,7 +24,7 @@ module.exports = app => {
                     email_usu: user.email_usu
                 }
 
-                res.json({
+                res.status(200).json({
                     name_usu: user.name_usu,
                     email_usu: user.email_usu,
                     token: jwt.encode(payload, authSecret),
