@@ -20,13 +20,15 @@ module.exports = app => {
 
                 const payload = {
                     id_usu: user.id_usu,
-                    name_usu: user.name_usu,
+                    nome_usu: user.nome_usu,
                     email_usu: user.email_usu
                 }
 
                 res.status(200).json({
-                    name_usu: user.name_usu,
+                    id_usu: user.id_usu,
+                    nome_usu: user.nome_usu,
                     email_usu: user.email_usu,
+                    tipo_usu: user.tipo_usu,
                     token: jwt.encode(payload, authSecret),
                 })
             })

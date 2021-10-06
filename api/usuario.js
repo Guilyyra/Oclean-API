@@ -15,6 +15,13 @@ module.exports = app => {
             .catch(erro => res.status(400).json(erro))
     }
 
+    const getUsuario = (req, res) => {
+        app.db('usuario')
+            .where({ id_usu: 20})
+            .then(usuario => res.status(200).json(usuario))
+            .catch(erro => res.status(400).json(erro))
+    }
+
     const cadastrarUsuario = (req, res) => {
         obterHash(req.body.senha_usu, hash => {
             const senhaCriptografada = hash
@@ -65,5 +72,5 @@ module.exports = app => {
             .catch(erro => res.status(400).json(erro))
     }
 
-    return { cadastrarUsuario, getUsuarios, deletarUsuario, alterarUsuario }
+    return { cadastrarUsuario, getUsuarios, getUsuario, deletarUsuario, alterarUsuario }
 }

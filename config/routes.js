@@ -6,6 +6,9 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.usuario.getUsuarios)
 
+    app.route('/usuarios/:id_usu')
+        .get(app.api.usuario.getUsuario)
+
     app.route('/usuarios/:id_usu/alterar')
         .all(app.config.passport.authenticate())
         .put(app.api.usuario.alterarUsuario)
