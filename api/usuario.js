@@ -17,7 +17,7 @@ module.exports = app => {
 
     const getUsuario = (req, res) => {
         app.db('usuario')
-            .where({ id_usu: 20})
+            .where({ id_usu: req.params.id_usu })
             .then(usuario => res.status(200).json(usuario))
             .catch(erro => res.status(400).json(erro))
     }
