@@ -9,9 +9,8 @@ module.exports = app => {
     }
 
     const getComunidade = (req, res) => {
-        console.log(req.params.id_comu)
         app.db('comunidade')
-            .where({ id_comu: req.params.id_comu })
+            .where({ nome_comu: req.params.nome_comu })
             .then(comunidade => res.status(200).json(comunidade))
             .catch(erro => res.status(400).json(erro))
     }
@@ -19,11 +18,11 @@ module.exports = app => {
     const cadastrarComunidade = (req, res) => {
         app.db('comunidade')
             .insert({ 
-                nome_comu: req.body.nome_comu.toLowerCase(),
+                nome_comu: req.body.nome_comu,
                 descricao_comu: req.body.descricao_comu,
                 id_ong: req.body.id_ong
             })
-            .then(_ => res.status(204).send())
+            .then(comunidade => res.status(204).json(comunidade))
             .catch(err => {
                 // Manda mensagem personalizada conforme o código do erro
                 switch(err.code){

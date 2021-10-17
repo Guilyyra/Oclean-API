@@ -1,3 +1,6 @@
+const multer = require('multer')
+const path = require('path')
+
 module.exports = app => {
     // Usuarios
     app.post('/usuarios/cadastrar', app.api.usuario.cadastrarUsuario)
@@ -26,7 +29,7 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.comunidade.getComunidades)
 
-    app.route('/comunidades/:id_comu')
+    app.route('/comunidades/:nome_comu')
         .all(app.config.passport.authenticate())
         .get(app.api.comunidade.getComunidade)
 
@@ -37,4 +40,26 @@ module.exports = app => {
     app.route('/comunidades/:id_comu/deletar')
         .all(app.config.passport.authenticate())
         .delete(app.api.comunidade.deletarComunidade)
+
+    // Imagens
+
+    const storage = multer.diskStorage({
+        destination(req, file, callback) {
+            callback(null, 'img/');
+        },
+        filename(req, file, callback) {
+          callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+        },
+      });
+
+    let upload = multer({ storage: storage });
+
+    app.get('/img/:imagem', app.api.img.enviarImagem)
+    
+    app.post('/api/upload', upload.single("photo"),(req, res) => {
+        // console.log(`Files received: ${req.file.length}`);
+        console.log('file', req.file);
+        console.log('body', req.body);
+        res.status(200).json({ link: 'http://192.168.15.28:3000/img/' + req.file.filename });
+    });
 }
