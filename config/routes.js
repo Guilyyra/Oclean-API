@@ -57,9 +57,24 @@ module.exports = app => {
     app.get('/img/:imagem', app.api.img.enviarImagem)
     
     app.post('/api/upload', upload.single("photo"),(req, res) => {
-        // console.log(`Files received: ${req.file.length}`);
-        console.log('file', req.file);
-        console.log('body', req.body);
         res.status(200).json({ link: 'http://192.168.15.28:3000/img/' + req.file.filename });
     });
+
+    // Sinalizações
+
+    app.route('/sinalizacao')
+        .all(app.config.passport.authenticate())
+        .get(app.api.sinalizacao.getSinalizacoes)
+
+    app.route('/sinalizacao/:id_sin')
+        .all(app.config.passport.authenticate())
+        .get(app.api.sinalizacao.getSinalizacao)
+    
+    app.route('/sinalizacao/cadastrar')
+        .all(app.config.passport.authenticate())
+        .post(app.api.sinalizacao.cadastrarSinalizacao)
+    
+    app.route('/sinalizacao/:id_sin/alterar')
+        .all(app.config.passport.authenticate())
+        .put(app.api.sinalizacao.alterarSinalizacao)
 }
