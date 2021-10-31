@@ -15,6 +15,13 @@ module.exports = app => {
             .catch(erro => res.status(400).json(erro))
     }
 
+    const getComunidadeById = (req, res) => {
+        app.db('comunidade')
+            .where({ id_comu: req.params.id_comu })
+            .then(comunidade => res.status(200).json(comunidade))
+            .catch(erro => res.status(400).json(erro))
+    }
+
     const cadastrarComunidade = (req, res) => {
         app.db('comunidade')
             .insert({ 
@@ -43,19 +50,25 @@ module.exports = app => {
     }
 
     const deletarComunidade = (req, res) => {
-        app.db('comunidade')
+        app.db('conexao_usuario_comunidade')
             .where({ id_comu: req.params.id_comu })
             .del()
             .then(rowsDeleted => {
-                if (rowsDeleted > 0) {
-                    res.status(204).send()
-                } else {
-                    const msg = `Não foi encontrado comunidade com id ${req.params.id_usu}.`
-                    res.status(400).send(msg)
-                }
+                app.db('comunidade')
+                    .where({ id_comu: req.params.id_comu })
+                    .del()
+                    .then(rowsDeleted => {
+                        if (rowsDeleted > 0) {
+                            res.status(204).send()
+                        } else {
+                            const msg = `Não foi encontrado comunidade com id ${req.params.id_usu}.`
+                            res.status(400).send(msg)
+                            }
+                        })
+                    .catch(erro => res.status(400).json(erro))
             })
-            .catch(erro => res.status(400).json(erro))
+            .catch(erro => res.status(400).json("AA" + erro))
     }
 
-    return { cadastrarComunidade, getComunidade, getComunidades, deletarComunidade, alterarComunidade }
+    return { cadastrarComunidade, getComunidade, getComunidades, deletarComunidade, alterarComunidade, getComunidadeById }
 }

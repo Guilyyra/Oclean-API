@@ -43,5 +43,20 @@ module.exports = app => {
             .catch(err => res.status(400).json(err))
     }
 
-    return { getSinalizacoes, getSinalizacao, cadastrarSinalizacao, alterarSinalizacao }
+    const deletarSinalizacao = (req, res) => {
+        app.db('sinalizacao')
+            .where({ id_sin: req.params.id_sin })
+            .del()
+            .then(rowsDeleted => {
+                if (rowsDeleted > 0) {
+                    res.status(204).send()
+                } else {
+                    const msg = `Não foi encontrado sinalização com id ${req.params.id_sin}.`
+                    res.status(400).send(msg)
+                }
+            })
+            .catch(erro => res.status(400).json(erro))
+    }
+
+    return { getSinalizacoes, getSinalizacao, cadastrarSinalizacao, alterarSinalizacao, deletarSinalizacao }
 }
