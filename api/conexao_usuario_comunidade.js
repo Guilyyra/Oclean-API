@@ -70,6 +70,20 @@ module.exports = app => {
             .catch(erro => res.status(400).json(erro))
     }
 
-    return { getConexoes, entrarComunidade, sairComunidade, verificarUsuario, numeroMembros, numeroComunidades, conexoesUsuario }
+    const comunidadesIdUsuario = (req,res) =>{
+        app.db('conexao_usuario_comunidade')
+            .where({ id_usu: req.params.id_usu })
+            .then(conexoes => {
+                const ids = new Array()
+                for( var conexao in conexoes){
+                    const id = conexoes[conexao].id_comu
+                    ids.push(id)
+                }
+                res.status(200).json(ids)
+            })
+
+    }
+
+    return { comunidadesIdUsuario, getConexoes, entrarComunidade, sairComunidade, verificarUsuario, numeroMembros, numeroComunidades, conexoesUsuario }
 
 }

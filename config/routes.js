@@ -29,6 +29,9 @@ module.exports = app => {
     app.route('/usuarios/:id_usu/conexoes')
         .get(app.api.conexao_usuario_comunidade.conexoesUsuario)
 
+    app.route('/usuarios/:id_usu/conexoes/comunidades')
+        .get(app.api.conexao_usuario_comunidade.comunidadesIdUsuario)
+
     // Comunidades
 
     app.post('/comunidades/cadastrar', app.api.comunidade.cadastrarComunidade)
@@ -90,7 +93,7 @@ module.exports = app => {
     app.get('/img/:imagem', app.api.img.enviarImagem)
     
     app.post('/api/upload', upload.single("photo"),(req, res) => {
-        res.status(200).json({ link: 'http://192.168.15.28:3000/img/' + req.file.filename });
+        res.status(200).json({ link: 'http://192.168.15.10:3000/img/' + req.file.filename });
     });
 
     // Sinalizações
@@ -132,4 +135,8 @@ module.exports = app => {
     app.route('/post/:id_post/deletar')
         .all(app.config.passport.authenticate())
         .delete(app.api.post.deletarPost)
+
+    app.route('/post/:id_usu/buscar')
+        .all(app.config.passport.authenticate())
+        .get(app.api.post.getPostsUsuario)
 }

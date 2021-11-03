@@ -8,6 +8,8 @@ exports.up = function(knex) {
         table.datetime('data_post').notNull()
         table.integer('id_usu').references('id_usu')
             .inTable('usuario').notNull()
+        table.integer('id_comu').references('id_comu')
+            .inTable('comunidade').notNull()
     })
 };
 

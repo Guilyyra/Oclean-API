@@ -21,7 +21,8 @@ module.exports = app => {
                 descricao_post: req.body.descricao_post,
                 foto_post: req.body.foto_post,
                 data_post: req.body.data_post,
-                id_post: req.body.cidade_post,
+                id_usu: req.body.id_usu,
+                id_comu: req.body.id_comu,
             })
             .then(post => res.status(204).json(post))
             .catch(err => {
@@ -44,6 +45,23 @@ module.exports = app => {
             .catch(erro => res.status(400).json(erro))
     }
 
-    return { getPost, getPosts, cadastrarPost, deletarPost }
+    const getPostsUsuario = (req, res) => {
+        app.db('conexao_usuario_comunidade')
+        .where({ id_usu: req.params.id_usu })
+        .then(conexoes => {
+            var ids = new Array()
+            for( var conexao in conexoes){
+                
+                const id = conexoes[conexao].id_comu
+                ids.push(id)
+            }
+            const db = app.db('post')
+                .whereIn('id_comu', ids)
+                .orderBy('data_post', 'desc')
+                .then(post => res.status(200).json(post))
+        })
+    }
+
+    return { getPostsUsuario, getPost, getPosts, cadastrarPost, deletarPost }
 
 }
