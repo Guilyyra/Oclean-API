@@ -56,7 +56,10 @@ module.exports = app => {
                 ids.push(id)
             }
             const db = app.db('post')
-                .whereIn('id_comu', ids)
+                // .whereIn('id_comu', ids)
+                .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
+                .join('usuario', 'post.id_usu', '=', 'usuario.id_usu' )
+                .whereIn('post.id_comu', ids)
                 .orderBy('data_post', 'desc')
                 .then(post => res.status(200).json(post))
         })
