@@ -93,7 +93,7 @@ module.exports = app => {
     app.get('/img/:imagem', app.api.img.enviarImagem)
     
     app.post('/api/upload', upload.single("photo"),(req, res) => {
-        res.status(200).json({ link: 'http://192.168.15.10:3000/img/' + req.file.filename });
+        res.status(200).json({ link: 'http://192.168.15.28:3000/img/' + req.file.filename });
     });
 
     // Sinalizações
