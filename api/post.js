@@ -65,6 +65,21 @@ module.exports = app => {
         })
     }
 
-    return { getPostsUsuario, getPost, getPosts, cadastrarPost, deletarPost }
+    const getPostsPerfil = (req, res) => {
+        app.db('post')
+            .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
+            .where({id_usu : req.params.id_usu})
+            .orderBy('data_post', 'desc')
+            .then(post => res.status(200).json(post))
+    }
+
+    const getPostsComunidade = (req, res) => {
+        app.db('post')
+            .join('usuario', 'post.id_usu', '=', 'usuario.id_usu' )
+            .where({id_comu : req.params.id_comu})
+            .orderBy('data_post', 'desc')
+            .then(post => res.status(200).json(post))
+    }
+    return { getPostsUsuario, getPost, getPosts, cadastrarPost, deletarPost, getPostsPerfil, getPostsComunidade }
 
 }
