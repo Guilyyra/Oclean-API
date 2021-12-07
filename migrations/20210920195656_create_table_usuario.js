@@ -10,6 +10,8 @@ exports.up = function(knex) {
         table.string('descricao_usu')
         table.string('loc_usu')
         table.datetime('nasc_usu')
+        table.string('foto_perfil')
+        table.string('foto_banner')
     })
 };
 

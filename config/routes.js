@@ -93,7 +93,7 @@ module.exports = app => {
     app.get('/img/:imagem', app.api.img.enviarImagem)
     
     app.post('/api/upload', upload.single("photo"),(req, res) => {
-        res.status(200).json({ link: 'http://192.168.15.10:3000/img/' + req.file.filename });
+        res.status(200).json({ link: 'http://192.168.15.28:3000/img/' + req.file.filename });
     });
 
     // Sinalizações
@@ -139,12 +139,16 @@ module.exports = app => {
     app.route('/post/:id_usu/buscar')
         .all(app.config.passport.authenticate())
         .get(app.api.post.getPostsUsuario)
-        
+
     app.route('/post/:id_usu/perfil')
         .all(app.config.passport.authenticate())
         .get(app.api.post.getPostsPerfil)
-        
+
     app.route('/post/:id_comu/comunidade')
         .all(app.config.passport.authenticate())
         .get(app.api.post.getPostsComunidade)
+
+    app.route('/buscar')
+        .all(app.config.passport.authenticate())
+        .post(app.api.search.buscar)
 }

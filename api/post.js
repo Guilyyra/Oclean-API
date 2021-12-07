@@ -9,7 +9,7 @@ module.exports = app => {
 
     const getPost = (req, res) => {
         app.db('post')
-            .where({ id_sin: req.params.id_sin })
+            .where({ id_post: req.params.id_post })
             .then(post => res.status(200).json(post))
             .catch(erro => res.status(400).json(erro))
     }
@@ -55,6 +55,7 @@ module.exports = app => {
                 const id = conexoes[conexao].id_comu
                 ids.push(id)
             }
+
             const db = app.db('post')
                 // .whereIn('id_comu', ids)
                 .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
@@ -66,17 +67,20 @@ module.exports = app => {
     }
 
     const getPostsPerfil = (req, res) => {
+        const id = req.params.id_usu
         app.db('post')
             .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
-            .where({id_usu : req.params.id_usu})
+            .join('usuario', 'post.id_usu', '=', 'usuario.id_usu' )
+            .where({'post.id_usu': id})
             .orderBy('data_post', 'desc')
             .then(post => res.status(200).json(post))
     }
 
     const getPostsComunidade = (req, res) => {
         app.db('post')
+            .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
             .join('usuario', 'post.id_usu', '=', 'usuario.id_usu' )
-            .where({id_comu : req.params.id_comu})
+            .where({'post.id_comu' : req.params.id_comu})
             .orderBy('data_post', 'desc')
             .then(post => res.status(200).json(post))
     }
