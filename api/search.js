@@ -10,6 +10,8 @@ module.exports = app => {
                 .whereRaw('LOWER(nome_comu) LIKE LOWER(?)', [`%${req.body.termo}%`])
                 .then(comunidades => {
                         app.db('post')
+                        .join('comunidade', 'post.id_comu', '=', 'comunidade.id_comu')
+                        .join('usuario', 'post.id_usu', '=', 'usuario.id_usu' )
                         .whereRaw('LOWER(titulo_post) LIKE LOWER(?)', [`%${req.body.termo}%`])
                         .then(posts => res.status(200).json([comunidades,posts]))})
         } catch(e) {
